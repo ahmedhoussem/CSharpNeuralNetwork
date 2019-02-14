@@ -15,7 +15,7 @@ namespace NN_Demo
         static void Main(string[] args)
         {
 
-            string exportPath = @"C:\Users\Bloodthirst\Desktop\CV\NeuralNetwork.json";
+            string exportPath = @"PATH_TO_SAVE_NN_FILE\NeuralNetwork.json";
 
             double GlobalError = 0d;
 
