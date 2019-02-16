@@ -53,10 +53,8 @@
     <Compile Include="Activators\Identity.cs" />
     <Compile Include="Activators\LeakyReLU.cs" />
     <Compile Include="Activators\Sigmoid.cs" />
-    <Compile Include="Bias.cs" />
     <Compile Include="Model File Save\NNData.cs" />
     <Compile Include="NeuralNet.cs" />
-    <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
