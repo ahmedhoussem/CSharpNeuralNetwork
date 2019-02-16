@@ -50,6 +50,7 @@
     <Compile Include="Activators\BiasActivation.cs" />
     <Compile Include="Activators\IActivator.cs" />
     <Compile Include="Activators\IActivatorConverter.cs" />
+    <Compile Include="Activators\Identity.cs" />
     <Compile Include="Activators\LeakyReLU.cs" />
     <Compile Include="Activators\Sigmoid.cs" />
     <Compile Include="Bias.cs" />

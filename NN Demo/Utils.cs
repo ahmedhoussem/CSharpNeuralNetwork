@@ -11,7 +11,7 @@ namespace NN_Demo
 
         private static readonly Random _random = new Random();
 
-        public static double GetRandomWeight()
+        public static double GetRandomWeight( double amp)
         {
             return (_random.NextDouble() - 0.5d);
         }

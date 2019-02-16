@@ -44,32 +44,32 @@ namespace NN_Demo
 
 
 
-            NeuralNet NN = new NeuralNet(new IActivator[] { new Sigmoid(), new Sigmoid(), new Sigmoid(), new Sigmoid() }, new int[] { TrainingData[0].Inputs.Count , 25 , 25 , TrainingData[0].Results.Count });
+            NeuralNet NN = new NeuralNet(new IActivator[] { new Sigmoid(), new Sigmoid(), new ReLU() }, new int[] { TrainingData[0].Inputs.Count, 2, TrainingData[0].Results.Count } , 5);
 
-            NN.LearningRate = 0.5d;
-            NN.Momentum = 0.7d;
+            NN.LearningRate = 0.7d;
+            NN.Momentum = 0.4d;
 
             #region train
-            while (NN.TotalError > 0.01d )
+            while (NN.TotalError > 0.01d)
             {
                 GlobalError = 0;
 
-                foreach(var sample in TrainingData)
-                { 
+                foreach (var sample in TrainingData)
+                {
                     NN.SetInputs(sample.Inputs);
 
                     NN.ForwadPropagation();
 
-                    NN.BackPropagation(sample.Results , ref GlobalError);
-                   
+                    NN.BackPropagation(sample.Results, ref GlobalError);
+
 
                     NN.AdjustWeights();
 
-         
+
 
                     NN.DescribeError();
 
-                   // NN.DescribeNN();
+                    // NN.DescribeNN();
 
                     Console.Clear();
                 }
@@ -87,19 +87,19 @@ namespace NN_Demo
             Console.WriteLine("TEST : ");
 
             Console.Clear();
-
+            Console.WriteLine("Epochs : " + NN.Epoch);
             foreach (var sample in TestData)
             {
                 NN.SetInputs(sample.Inputs);
                 NN.ForwadPropagation();
                 Console.Write(" Input : (");
-                foreach( var input in sample.Inputs)
+                foreach (var input in sample.Inputs)
                 {
                     Console.Write($"{ input } , ");
                 }
                 Console.Write(") , Outputs : (");
 
-                foreach (var outpur in NN.Structure.Last() )
+                foreach (var outpur in NN.Structure.Last())
                 {
                     Console.Write($" { outpur.ActivatedOutput } , ");
                 }
@@ -108,8 +108,10 @@ namespace NN_Demo
             }
 
             #endregion
-
+            /*
+            #region File import/export
             Console.WriteLine("IMPORTED : ");
+
 
             NN.ExportWeights(exportPath);
 
@@ -133,8 +135,8 @@ namespace NN_Demo
 
                 Console.WriteLine(")");
             }
-
-
+            #endregion
+            */
 
             Console.ReadKey();
         }

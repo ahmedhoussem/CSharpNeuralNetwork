@@ -30,7 +30,7 @@ namespace NN_Demo
 
         }
 
-        public NeuralNet(IActivator[] Activations, int[] Hyperparameters)
+        public NeuralNet(IActivator[] Activations, int[] Hyperparameters , double WeightAmplitude)
         {
             TotalError = 1d;
 
@@ -63,7 +63,7 @@ namespace NN_Demo
                     {
                         //Create link
                         var Link = new WeightLink() { Left = Structure[i - 1][k], Right = neuron };
-                        Link.RandomizeWeight();
+                        Link.RandomizeWeight(WeightAmplitude);
 
                         //Link previous neuron
                         Structure[i - 1][k].NextLinks.Add(Link);
@@ -85,12 +85,12 @@ namespace NN_Demo
 
         public void ForwadPropagation()
         {
-            foreach (var layer in Structure.Skip(1))
+            for (int i = 1; i < Structure.Count(); i++)
             {
-                Parallel.ForEach(layer, (neuron) =>
+                Parallel.For(0 , Structure[i].Count, (index) =>
                {
-                   neuron.ComputeInputs();
-                   neuron.ComputeActivatedOutput();
+                   Structure[i][index].ComputeInputs();
+                   Structure[i][index].ComputeActivatedOutput();
                });
 
 
@@ -134,23 +134,20 @@ namespace NN_Demo
         void CalculateGammaOutput()
         {
 
-            foreach (var layer in Structure.Last())
+            for (int i = 0; i < Structure.Last().Count; i++)
             {
-                for (int j = 0; j < layer.PreviousLinks.Count; j++)
-                {
-                    layer.ComputeGammaOutput();
-                }
+                Structure.Last()[i].ComputeGammaOutput();
             }
         }
 
         void CalculateDeltaWeightsOutput()
         {
 
-            foreach (var layer in Structure.Last())
+            for (int i = 0; i < Structure.Last().Count; i++)
             {
-                for (int j = 0; j < layer.PreviousLinks.Count; j++)
+                for (int j = 0; j < Structure.Last()[i].PreviousLinks.Count; j++)
                 {
-                    layer.PreviousLinks[j].AdjustDeltaOutput();
+                    Structure.Last()[i].PreviousLinks[j].AdjustDeltaOutput();
                 }
             }
         }
@@ -164,30 +161,30 @@ namespace NN_Demo
 
         void BackpropHidden()
         {
-            foreach (var layer in Structure.Reverse().Skip(1))
+            for (int i = Structure.Count() - 2; i >= 0; i--)
             {
-                Parallel.ForEach(layer, (neuron) =>
+                Parallel.For(0, Structure[i].Count, (index) =>
+              {
+                  {
+                      Structure[i][index].Gamma = 0;
+                      for (int j = 0; j < Structure[i][index].NextLinks.Count; j++)
+                      {
+                          Structure[i][index].Gamma += Structure[i][index].NextLinks[j].Right.Gamma * Structure[i][index].NextLinks[j].Weight;
+                      }
+
+                      Structure[i][index].Gamma *= Structure[i][index].ActivatedOutput;
+                  }
+              });
+
+                Parallel.For(0, Structure[i].Count, (index) =>
                 {
                     {
-                        neuron.Gamma = 0;
-                        foreach (var link in neuron.NextLinks)
+                        for (int j = 0; j < Structure[i][index].PreviousLinks.Count; j++)
                         {
-                            neuron.Gamma += link.Right.Gamma * link.Weight;
+                            Structure[i][index].PreviousLinks[j].Delta = Structure[i][index].PreviousLinks[j].Right.Gamma * Structure[i][index].PreviousLinks[j].Left.ActivatedOutput;
                         }
-
-                        neuron.Gamma *= neuron.ActivatedOutput;
                     }
                 });
-
-                Parallel.ForEach(layer, (neuron) =>
-                 {
-                     {
-                         foreach (var link in neuron.PreviousLinks)
-                         {
-                             link.Delta = link.Right.Gamma * link.Left.ActivatedOutput;
-                         }
-                     }
-                 });
 
 
             }
@@ -233,11 +230,11 @@ namespace NN_Demo
 
             var WeightsData = new List<WeightLink>();
 
-            foreach(var layer in Structure.Skip(1) )
+            foreach (var layer in Structure.Skip(1))
             {
-                foreach(var neuron in layer)
+                foreach (var neuron in layer)
                 {
-                    foreach( var link in neuron.PreviousLinks)
+                    foreach (var link in neuron.PreviousLinks)
                     {
                         WeightsData.Add(link);
                     }
@@ -254,9 +251,9 @@ namespace NN_Demo
                     return l.Count;
             }).ToList();
 
-            var Data = new NNData { Details = Hyperparameters, Activators = Activators,  LearningRate = LearningRate, Momentum = Momentum, Weights = WeightsData  };
+            var Data = new NNData { Details = Hyperparameters, Activators = Activators, LearningRate = LearningRate, Momentum = Momentum, Weights = WeightsData };
 
-            var jsonString = JsonConvert.SerializeObject(Data , settings);
+            var jsonString = JsonConvert.SerializeObject(Data, settings);
 
             if (File.Exists(path))
             {
@@ -320,7 +317,7 @@ namespace NN_Demo
                         var dequeued = LinksQueue.Dequeue();
 
                         //Create link
-                        var Link = new WeightLink() { Left = NN.Structure[i - 1][k], Right = neuron , Weight = dequeued.Weight  };
+                        var Link = new WeightLink() { Left = NN.Structure[i - 1][k], Right = neuron, Weight = dequeued.Weight };
 
                         //Link previous neuron
                         NN.Structure[i - 1][k].NextLinks.Add(Link);
@@ -337,7 +334,7 @@ namespace NN_Demo
                 }
             }
 
-            Console.WriteLine("Weights left :" + LinksQueue.Count );
+            Console.WriteLine("Weights left :" + LinksQueue.Count);
 
             return NN;
         }

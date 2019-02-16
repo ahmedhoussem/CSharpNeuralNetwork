@@ -20,9 +20,9 @@ namespace NN_Demo
 
         public double PreviousChange { get; set; }
 
-        public void RandomizeWeight()
+        public void RandomizeWeight(double amp)
         {
-            Weight = Utils.GetRandomWeight();
+            Weight = Utils.GetRandomWeight(amp);
         }
 
         public void AdjustDeltaOutput()

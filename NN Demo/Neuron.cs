@@ -38,9 +38,9 @@ namespace NN_Demo
         public void ComputeInputs()
         {
             double sum = 0d;
-            foreach( var link in PreviousLinks)
+            for( int i = 0; i < PreviousLinks.Count; i++)
             {
-                sum += link.Weight * link.Left.ActivatedOutput;
+                sum += PreviousLinks[i].Weight * PreviousLinks[i].Left.ActivatedOutput;
             }
 
             Input = sum;
@@ -71,9 +71,9 @@ namespace NN_Demo
 
         public void ComputeDeltaWeightsOutput()
         {
-            foreach(var link in PreviousLinks)
+            for(int i = 0; i < PreviousLinks.Count; i++)
             {
-                link.AdjustDeltaOutput();             
+                PreviousLinks[i].AdjustDeltaOutput();             
             }
         }
 
@@ -81,16 +81,16 @@ namespace NN_Demo
         {
             Gamma = 0;
 
-            foreach (var link in NextLinks)
+            for (int i = 0; i < NextLinks.Count; i++)
             {
-                Gamma += link.Right.Gamma * link.Weight;
+                Gamma += NextLinks[i].Right.Gamma * NextLinks[i].Weight;
             }
 
             Gamma = Gamma * Activation.ActivatorSlope(Output);
 
-            foreach (var link in PreviousLinks)
+            for (int i = 0; i < PreviousLinks.Count; i++)
             {
-                link.Delta = link.Right.Gamma * link.Left.ActivatedOutput;
+                PreviousLinks[i].Delta = PreviousLinks[i].Right.Gamma * PreviousLinks[i].Left.ActivatedOutput;
             }
 
         }
