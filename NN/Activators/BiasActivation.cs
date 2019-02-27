@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NN_Demo.Activators
+namespace NN.Activators
 {
     public class BiasActivation : IActivator
     {

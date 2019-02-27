@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NN_Demo.Model_File_Save
+namespace NN.ModelFileSave
 {
     public class NNData
     {

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NN_Demo.Activators
+namespace NN.Activators
 {
-    class Identity : IActivator
+    public class Sigmoid : IActivator
     {
         public double ActivatorSlope(double val)
         {
-            return 1;
+            return val * (1.0 - val);
         }
 
         public double ActivatorValue(double val)
         {
-            return val;
+            return 1 / (1 + Math.Exp(-val));
         }
     }
 }

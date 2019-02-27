@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using NN_Demo.Activators;
+using NN.Activators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NN_Demo
+namespace NN
 {
     public class Program
     {
@@ -42,19 +42,22 @@ namespace NN_Demo
 
             };
 
+            var LoadedData = Sample.LoadSamplesFromFile(@"C:\Users\Bloodthirst\Desktop\CV\UnityData.json");
+            LoadedData = LoadedData.Where(s => s.Results.All(x => x == 0) == false).ToList();
 
 
-            NeuralNet NN = new NeuralNet(new IActivator[] { new Sigmoid(), new Sigmoid(), new ReLU() }, new int[] { TrainingData[0].Inputs.Count, 2, TrainingData[0].Results.Count } , 5);
 
-            NN.LearningRate = 0.7d;
-            NN.Momentum = 0.4d;
+            NeuralNet NN = new NeuralNet(new IActivator[] { new Sigmoid(), new Sigmoid(), new Sigmoid(), new Identity() }, new int[] { LoadedData[0].Inputs.Count, 25, 25, LoadedData[0].Results.Count }, 10);
+
+            NN.LearningRate = 1;
+            NN.Momentum = 0.7;
 
             #region train
             while (NN.TotalError > 0.01d)
             {
                 GlobalError = 0;
 
-                foreach (var sample in TrainingData)
+                foreach (var sample in LoadedData)
                 {
                     NN.SetInputs(sample.Inputs);
 
@@ -79,10 +82,18 @@ namespace NN_Demo
 
                 NN.Epoch++;
 
+                if (Console.KeyAvailable)
+                {
+                    break;
+                }
+
             }
             #endregion
 
 
+            NN.ExportWeights(@"C:\Users\Bloodthirst\Desktop\CV\UnityWeights.json");
+
+            /*
             #region test
             Console.WriteLine("TEST : ");
 
@@ -108,6 +119,9 @@ namespace NN_Demo
             }
 
             #endregion
+
+            */
+
             /*
             #region File import/export
             Console.WriteLine("IMPORTED : ");
@@ -142,4 +156,3 @@ namespace NN_Demo
         }
     }
 }
-

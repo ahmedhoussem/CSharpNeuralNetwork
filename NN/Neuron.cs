@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using NN_Demo.Activators;
+using NN.Activators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NN_Demo
+namespace NN
 {
     public class Neuron
     {
@@ -38,7 +38,7 @@ namespace NN_Demo
         public void ComputeInputs()
         {
             double sum = 0d;
-            for( int i = 0; i < PreviousLinks.Count; i++)
+            for (int i = 0; i < PreviousLinks.Count; i++)
             {
                 sum += PreviousLinks[i].Weight * PreviousLinks[i].Left.ActivatedOutput;
             }
@@ -52,12 +52,12 @@ namespace NN_Demo
         }
 
 
-        public void ComputeErrorOutput(double Ideal , ref double OutputError)
+        public void ComputeErrorOutput(double Ideal, ref double OutputError)
         {
             //Error = actual - ideal
-            Error =  ActivatedOutput - Ideal;
+            Error = ActivatedOutput - Ideal;
 
-            OutputError += Math.Pow(Error , 2);
+            OutputError += Math.Pow(Error, 2);
 
         }
 
@@ -71,9 +71,9 @@ namespace NN_Demo
 
         public void ComputeDeltaWeightsOutput()
         {
-            for(int i = 0; i < PreviousLinks.Count; i++)
+            for (int i = 0; i < PreviousLinks.Count; i++)
             {
-                PreviousLinks[i].AdjustDeltaOutput();             
+                PreviousLinks[i].AdjustDeltaOutput();
             }
         }
 
@@ -101,7 +101,7 @@ namespace NN_Demo
             part1 += $" \n Previous links : {PreviousLinks.Count}\n";
             foreach (var prev in PreviousLinks)
             {
-                part1 += " " + prev.Weight +" ," ;
+                part1 += " " + prev.Weight + " ,";
             }
             part1 += $" \n Next links : {NextLinks.Count}\n";
 
@@ -110,10 +110,9 @@ namespace NN_Demo
                 part1 += " " + next.Weight + " ,";
             }
 
-            return  part1;
+            return part1;
         }
 
 
     }
-
 }

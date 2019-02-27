@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace NN_Demo
+namespace NN
 {
     public class WeightLink
     {
@@ -31,9 +30,9 @@ namespace NN_Demo
         }
 
 
-        public void AdjustWeight(double LearningRate , double Momentum)
+        public void AdjustWeight(double LearningRate, double Momentum)
         {
-            PreviousChange = (Delta * LearningRate) + (Momentum * PreviousChange); 
+            PreviousChange = (Delta * LearningRate) + (Momentum * PreviousChange);
             Weight -= PreviousChange;
         }
     }

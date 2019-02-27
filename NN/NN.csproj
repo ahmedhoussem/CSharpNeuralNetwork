@@ -7,8 +7,8 @@
     <ProjectGuid>{F64D9272-77DC-41C4-B100-22D1AD23C977}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NN_Demo</RootNamespace>
-    <AssemblyName>NN Demo</AssemblyName>
+    <RootNamespace>NN</RootNamespace>
+    <AssemblyName>NN</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

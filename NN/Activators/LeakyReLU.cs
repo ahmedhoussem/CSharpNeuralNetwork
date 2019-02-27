@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NN_Demo
+namespace NN
 {
-    public class ReLU : IActivator
+    public class LeakyReLU : IActivator
     {
         public double ActivatorValue(double val)
         {
-            return val >= 0 ? val : 0;
+            return val >= 0 ? val : val * .01;
         }
 
         public double ActivatorSlope(double val)
         {
-            return val >= 0 ? 1 : 0;
+            return val >= 0 ? 1 : .01;
         }
+
     }
 }
